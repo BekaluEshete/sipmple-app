@@ -36,6 +36,7 @@ class _ExpensesState extends State<Expenses> {
   ];
   void _modalBottmSheet() {
     showModalBottomSheet(
+        useSafeArea: true,
         isScrollControlled: true,
         context: context,
         builder: ((ctx) => NewExpense(
@@ -72,6 +73,7 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     Widget maincontent = const Center(
       child: Text('there is no expence please add some!'),
     );
@@ -88,13 +90,20 @@ class _ExpensesState extends State<Expenses> {
           IconButton(onPressed: _modalBottmSheet, icon: const Icon(Icons.add))
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Chart(expenses: _customExpences),
-          Expanded(child: maincontent)
-        ],
-      ),
+      body: width < 600
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Chart(expenses: _customExpences),
+                Expanded(child: maincontent)
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(child: Chart(expenses: _customExpences)),
+                Expanded(child: maincontent)
+              ],
+            ),
     );
   }
 }
